@@ -181,7 +181,6 @@ TEST(commands, number_of_cds)
     EXPECT_EQ(expected, number_of_cds(testDB));
 }
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION read_tracks 
 TEST(read, read_db_with_zero_tracks)
 {
     vector<Track> the_tracks;
@@ -206,4 +205,3 @@ TEST(read, read_MusicDB)
     vector<Track> the_tracks;
     EXPECT_EQ(read_tracks ("Tracks.txt", the_tracks, false), 6868);
 }
-END OF COMMENT */

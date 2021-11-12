@@ -70,8 +70,7 @@ istream& operator>> (istream& in, Length& length)
 /*  Postcondition:
     the value of length has been read from in: first minutes, then ':', then seconds
 */
-    string a;
-
+    char a = ':';
     in >> length.minutes >> a >> length.seconds;;
     
     return in;
