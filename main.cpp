@@ -111,7 +111,7 @@ void show_track (Track track, TrackDisplay lt)
    if(lt.showTrack) cout << track.track << endl; 
    if(lt.showTitle) cout << track.title << endl; 
    if(lt.showTags) cout << track.tags << endl; 
-   if(lt.showLength) cout << track.time<< endl; 
+   if(lt.showLength) cout << track.time << endl; 
    if(lt.showCountry) cout << track.country << endl; 
 
 }
