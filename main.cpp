@@ -104,6 +104,16 @@ void show_track (Track track, TrackDisplay lt)
 /*  Postcondition:
     only the members of track are shown for which the corresponding member in lt is true.
 */
+
+   if(lt.showArtist) cout << track.artist << endl; 
+   if(lt.showAlbum) cout << track.album << endl; 
+   if(lt.showYear) cout << track.year << endl; 
+   if(lt.showTrack) cout << track.track << endl; 
+   if(lt.showTitle) cout << track.title << endl; 
+   if(lt.showTags) cout << track.tags << endl; 
+   if(lt.showLength) cout << track.length<< endl; 
+   if(lt.showCountry) cout << track.country << endl; 
+
 }
 
 int match_tracks (const vector<Track>& tracks, string track, bool display)
