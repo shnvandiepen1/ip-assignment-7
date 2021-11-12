@@ -112,7 +112,6 @@ TEST(operators, length_random)
     }
 }
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION match_tracks
 TEST(commands, match_tracks1)
 {
     string match = "my";
@@ -133,7 +132,6 @@ TEST(commands, match_tracks3)
     int expected = 2;
     EXPECT_EQ(expected, match_tracks(testDB,match,false));
 }
-END OF COMMENT */
 
 /* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION match_artists
 TEST(commands, match_artists1)

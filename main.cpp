@@ -106,12 +106,12 @@ void show_track (Track track, TrackDisplay lt)
 */
 
    if(lt.showArtist) cout << track.artist << endl; 
-   if(lt.showAlbum) cout << track.album << endl; 
+   if(lt.showAlbum) cout << track.cd << endl; 
    if(lt.showYear) cout << track.year << endl; 
    if(lt.showTrack) cout << track.track << endl; 
    if(lt.showTitle) cout << track.title << endl; 
    if(lt.showTags) cout << track.tags << endl; 
-   if(lt.showLength) cout << track.length<< endl; 
+   if(lt.showLength) cout << track.time << endl; 
    if(lt.showCountry) cout << track.country << endl; 
 
 }
@@ -119,6 +119,19 @@ void show_track (Track track, TrackDisplay lt)
 int match_tracks (const vector<Track>& tracks, string track, bool display)
 {
     //implement your function
+    int matches = 0;
+    for(int i = 0; i < tracks.size(); i++){
+        if(match(tracks[i].title, track)){
+            if(display){
+                TrackDisplay lt = {true, true, true, true, true, true, true, true};
+                show_track(tracks[i], lt);
+                matches++;
+            } else {
+                matches++;
+            }
+        }
+    }
+    return matches;
 }
 
 int match_artists (const vector<Track>& tracks, string artist, bool display)
