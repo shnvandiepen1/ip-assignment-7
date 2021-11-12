@@ -1,0 +1,5 @@
+if(EXISTS "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/main_test[1]_tests.cmake")
+  include("/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/main_test[1]_tests.cmake")
+else()
+  add_test(main_test_NOT_BUILT main_test_NOT_BUILT)
+endif()

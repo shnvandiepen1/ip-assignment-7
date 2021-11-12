@@ -1,0 +1,5 @@
+add_test( operators.length_desktop /Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/main_test [==[--gtest_filter=operators.length_desktop]==] --gtest_also_run_disabled_tests)
+set_tests_properties( operators.length_desktop PROPERTIES WORKING_DIRECTORY /Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test( operators.length_random /Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/main_test [==[--gtest_filter=operators.length_random]==] --gtest_also_run_disabled_tests)
+set_tests_properties( operators.length_random PROPERTIES WORKING_DIRECTORY /Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set( main_test_TESTS operators.length_desktop operators.length_random)

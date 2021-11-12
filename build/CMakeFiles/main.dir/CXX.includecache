@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/main.cpp
+iostream
+-
+fstream
+-
+string
+-
+cstdlib
+-
+cstring
+-
+vector
+-
+cassert
+-
+
