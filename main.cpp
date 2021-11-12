@@ -106,34 +106,129 @@ void show_track (Track track, TrackDisplay lt)
 */
 
    if(lt.showArtist) cout << track.artist << endl; 
-   if(lt.showAlbum) cout << track.album << endl; 
+   if(lt.showAlbum) cout << track.cd << endl; 
    if(lt.showYear) cout << track.year << endl; 
    if(lt.showTrack) cout << track.track << endl; 
    if(lt.showTitle) cout << track.title << endl; 
    if(lt.showTags) cout << track.tags << endl; 
-   if(lt.showLength) cout << track.length<< endl; 
+   if(lt.showLength) cout << track.time<< endl; 
    if(lt.showCountry) cout << track.country << endl; 
 
 }
 
 int match_tracks (const vector<Track>& tracks, string track, bool display)
 {
-    //implement your function
+    // Precondition
+    assert(true);
+    // Postcondition
+    // Returns amount of matched tracks found and displays info about them if display is true
+
+    int matches = 0;
+    for (long unsigned int i = 0; i < tracks.size(); i++)
+    {
+        if(match(track, tracks[i].title)) {
+            if(display) {
+                TrackDisplay td = {
+                    true, true, true, true, true, true, true, true
+                };
+                show_track(tracks[i], td);
+            }
+            matches++;
+        }
+    }
+    return matches;
 }
 
 int match_artists (const vector<Track>& tracks, string artist, bool display)
 {
-    //implement your function
+    // Precondition
+    assert(true);
+    // Postcondition
+    // Returns the amount of matched tracks based on artist, each artists counted
+    // max once. Displays artists if display set to true.
+
+    vector<string> matchedArtists;
+    for(long unsigned int i = 0; i < tracks.size(); i++) {
+        const string CURRENT_ARTIST = tracks[i].artist;
+        if (match(artist, CURRENT_ARTIST))
+        {
+            bool alreadyMatched = false;
+            for (long unsigned int j = 0; j < matchedArtists.size(); j++)
+            {
+                if(CURRENT_ARTIST == matchedArtists[j])
+                    alreadyMatched = true;
+            }
+            if(!alreadyMatched) {
+                if(display) {
+                    TrackDisplay td = {
+                        true,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    };
+                    show_track(tracks[i], td);
+                }
+                matchedArtists.push_back(CURRENT_ARTIST);
+            }
+        }
+    }
+    return matchedArtists.size();
 }
 
 int match_cds (const vector<Track>& tracks, string artist, bool display)
 {
-    //implement your function
+    // Precondition
+    assert(true);
+    // Postcondition
+    // Returns the amount of matched cds based on artist, each album counted
+    // max once. Displays information about album if display set to true.
+
+    vector<string> matchedAlbums;
+    for (long unsigned int i = 0; i < tracks.size(); i++)
+    {
+        if(match(artist, tracks[i].artist)) {
+            bool alreadyMatched = false;
+            for (long unsigned int j = 0; j < matchedAlbums.size(); j++)
+            {
+                if (tracks[i].cd == matchedAlbums[j])
+                    alreadyMatched = true;
+            }
+            if (!alreadyMatched)
+            {
+                if (display)
+                {
+                    TrackDisplay td = {
+                        true, true, true, false, false, false, false, false};
+                    show_track(tracks[i], td);
+                }
+                matchedAlbums.push_back(tracks[i].cd);
+            }
+        }
+    }    
+    return matchedAlbums.size();
 }
 
 int number_of_cds (const vector<Track>& tracks)
 {
-    //implement your function
+    // Precondition
+    assert(true);
+    // Postcondition
+    //
+
+    vector<string> albums;
+    for(long unsigned int i = 0; i < tracks.size(); i++) {
+        bool alreadyCounted = false;
+        for(long unsigned int j = 0; j < albums.size(); j++)
+            if (tracks[i].cd == albums[j]) 
+                alreadyCounted = true;
+        if(!alreadyCounted)
+            albums.push_back(tracks[i].cd);
+    }
+    return albums.size();
 }
 
 istream& operator>> (istream& in, Track& track)

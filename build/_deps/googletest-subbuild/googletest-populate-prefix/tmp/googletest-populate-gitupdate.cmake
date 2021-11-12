@@ -1,11 +1,7 @@
-# Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
-# file Copyright.txt or https://cmake.org/licensing for details.
-
-cmake_minimum_required(VERSION 3.5)
 
 execute_process(
-  COMMAND "/usr/local/bin/git" rev-list --max-count=1 HEAD
-  WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+  COMMAND "/usr/bin/git" rev-list --max-count=1 HEAD
+  WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
   RESULT_VARIABLE error_code
   OUTPUT_VARIABLE head_sha
   OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -15,8 +11,8 @@ if(error_code)
 endif()
 
 execute_process(
-  COMMAND "/usr/local/bin/git" show-ref "e2239ee6043f73722e7aa812a459f54a28552929"
-  WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+  COMMAND "/usr/bin/git" show-ref e2239ee6043f73722e7aa812a459f54a28552929
+  WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
   OUTPUT_VARIABLE show_ref_output
   )
 # If a remote ref is asked for, which can possibly move around,
@@ -41,8 +37,8 @@ endif()
 # This will fail if the tag does not exist (it probably has not been fetched
 # yet).
 execute_process(
-  COMMAND "/usr/local/bin/git" rev-list --max-count=1 "${git_tag}"
-  WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+  COMMAND "/usr/bin/git" rev-list --max-count=1 e2239ee6043f73722e7aa812a459f54a28552929
+  WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
   RESULT_VARIABLE error_code
   OUTPUT_VARIABLE tag_sha
   OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -51,8 +47,8 @@ execute_process(
 # Is the hash checkout out that we want?
 if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
   execute_process(
-    COMMAND "/usr/local/bin/git" fetch
-    WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+    COMMAND "/usr/bin/git" fetch
+    WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
     RESULT_VARIABLE error_code
     )
   if(error_code)
@@ -62,8 +58,8 @@ if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
   if(is_remote_ref)
     # Check if stash is needed
     execute_process(
-      COMMAND "/usr/local/bin/git" status --porcelain
-      WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+      COMMAND "/usr/bin/git" status --porcelain
+      WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
       RESULT_VARIABLE error_code
       OUTPUT_VARIABLE repo_status
       )
@@ -72,12 +68,12 @@ if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
     endif()
     string(LENGTH "${repo_status}" need_stash)
 
-    # If not in clean state, stash changes in order to be able to perform a
-    # rebase or checkout without losing those changes permanently
+    # If not in clean state, stash changes in order to be able to be able to
+    # perform git pull --rebase
     if(need_stash)
       execute_process(
-        COMMAND "/usr/local/bin/git" stash save --all;--quiet
-        WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+        COMMAND "/usr/bin/git" stash save --all;--quiet
+        WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
         RESULT_VARIABLE error_code
         )
       if(error_code)
@@ -85,132 +81,80 @@ if(error_code OR is_remote_ref OR NOT ("${tag_sha}" STREQUAL "${head_sha}"))
       endif()
     endif()
 
-    if("REBASE" STREQUAL "CHECKOUT")
+    # Pull changes from the remote branch
+    execute_process(
+      COMMAND "/usr/bin/git" rebase ${git_remote}/${git_tag}
+      WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
+      RESULT_VARIABLE error_code
+      )
+    if(error_code)
+      # Rebase failed: Restore previous state.
       execute_process(
-        COMMAND "/usr/local/bin/git" checkout "${git_remote}/${git_tag}"
-        WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-        RESULT_VARIABLE error_code
-        )
-      if(error_code)
-        message(FATAL_ERROR "Failed to checkout tag: '${git_remote}/${git_tag}'")
+        COMMAND "/usr/bin/git" rebase --abort
+        WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
+      )
+      if(need_stash)
+        execute_process(
+          COMMAND "/usr/bin/git" stash pop --index --quiet
+          WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
+          )
       endif()
-    else()
-      # Pull changes from the remote branch
-      execute_process(
-        COMMAND "/usr/local/bin/git" rebase "${git_remote}/${git_tag}"
-        WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-        RESULT_VARIABLE error_code
-        OUTPUT_VARIABLE rebase_output
-        ERROR_VARIABLE  rebase_output
-        )
-      if(error_code)
-        # Rebase failed, undo the rebase attempt before continuing
-        execute_process(
-          COMMAND "/usr/local/bin/git" rebase --abort
-          WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-        )
-
-        if(NOT "REBASE" STREQUAL "REBASE_CHECKOUT")
-          # Not allowed to do a checkout as a fallback, so cannot proceed
-          if(need_stash)
-            execute_process(
-              COMMAND "/usr/local/bin/git" stash pop --index --quiet
-              WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-              )
-          endif()
-          message(FATAL_ERROR "\nFailed to rebase in: '/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src'."
-                              "\nOutput from the attempted rebase follows:"
-                              "\n${rebase_output}"
-                              "\n\nYou will have to resolve the conflicts manually")
-        endif()
-
-        # Fall back to checkout. We create an annotated tag so that the user
-        # can manually inspect the situation and revert if required.
-        # We can't log the failed rebase output because MSVC sees it and
-        # intervenes, causing the build to fail even though it completes.
-        # Write it to a file instead.
-        string(TIMESTAMP tag_timestamp "%Y%m%dT%H%M%S" UTC)
-        set(tag_name _cmake_ExternalProject_moved_from_here_${tag_timestamp}Z)
-        set(error_log_file ${CMAKE_CURRENT_LIST_DIR}/rebase_error_${tag_timestamp}Z.log)
-        file(WRITE ${error_log_file} "${rebase_output}")
-        message(WARNING "Rebase failed, output has been saved to ${error_log_file}"
-                        "\nFalling back to checkout, previous commit tagged as ${tag_name}")
-        execute_process(
-          COMMAND "/usr/local/bin/git" tag -a
-                  -m "ExternalProject attempting to move from here to ${git_remote}/${git_tag}"
-                  ${tag_name}
-          WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-          RESULT_VARIABLE error_code
-        )
-        if(error_code)
-          message(FATAL_ERROR "Failed to add marker tag")
-        endif()
-
-        execute_process(
-          COMMAND "/usr/local/bin/git" checkout "${git_remote}/${git_tag}"
-          WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
-          RESULT_VARIABLE error_code
-        )
-        if(error_code)
-          message(FATAL_ERROR "Failed to checkout : '${git_remote}/${git_tag}'")
-        endif()
-
-      endif()
+      message(FATAL_ERROR "\nFailed to rebase in: '/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src/'.\nYou will have to resolve the conflicts manually")
     endif()
 
     if(need_stash)
       execute_process(
-        COMMAND "/usr/local/bin/git" stash pop --index --quiet
-        WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+        COMMAND "/usr/bin/git" stash pop --index --quiet
+        WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
         RESULT_VARIABLE error_code
         )
       if(error_code)
         # Stash pop --index failed: Try again dropping the index
         execute_process(
-          COMMAND "/usr/local/bin/git" reset --hard --quiet
-          WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+          COMMAND "/usr/bin/git" reset --hard --quiet
+          WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
           RESULT_VARIABLE error_code
           )
         execute_process(
-          COMMAND "/usr/local/bin/git" stash pop --quiet
-          WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+          COMMAND "/usr/bin/git" stash pop --quiet
+          WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
           RESULT_VARIABLE error_code
           )
         if(error_code)
           # Stash pop failed: Restore previous state.
           execute_process(
-            COMMAND "/usr/local/bin/git" reset --hard --quiet ${head_sha}
-            WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+            COMMAND "/usr/bin/git" reset --hard --quiet ${head_sha}
+            WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
           )
           execute_process(
-            COMMAND "/usr/local/bin/git" stash pop --index --quiet
-            WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+            COMMAND "/usr/bin/git" stash pop --index --quiet
+            WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
           )
-          message(FATAL_ERROR "\nFailed to unstash changes in: '/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src'."
-                              "\nYou will have to resolve the conflicts manually")
+          message(FATAL_ERROR "\nFailed to unstash changes in: '/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src/'.\nYou will have to resolve the conflicts manually")
         endif()
       endif()
     endif()
   else()
     execute_process(
-      COMMAND "/usr/local/bin/git" checkout "${git_tag}"
-      WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+      COMMAND "/usr/bin/git" checkout e2239ee6043f73722e7aa812a459f54a28552929
+      WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src"
       RESULT_VARIABLE error_code
       )
     if(error_code)
-      message(FATAL_ERROR "Failed to checkout tag: '${git_tag}'")
+      message(FATAL_ERROR "Failed to checkout tag: 'e2239ee6043f73722e7aa812a459f54a28552929'")
     endif()
   endif()
 
-  set(init_submodules "TRUE")
+  set(init_submodules TRUE)
   if(init_submodules)
     execute_process(
-      COMMAND "/usr/local/bin/git" submodule update --recursive --init 
-      WORKING_DIRECTORY "/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src"
+      COMMAND "/usr/bin/git" submodule update --recursive --init 
+      WORKING_DIRECTORY "/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src/"
       RESULT_VARIABLE error_code
       )
   endif()
   if(error_code)
-    message(FATAL_ERROR "Failed to update submodules in: '/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/build/_deps/googletest-src'")
+    message(FATAL_ERROR "Failed to update submodules in: '/home/robert/code/ru/ip-assignment-7/build/_deps/googletest-src/'")
   endif()
 endif()
+

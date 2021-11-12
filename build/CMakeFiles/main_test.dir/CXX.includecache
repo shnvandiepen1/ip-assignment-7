@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/main.cpp
+/home/robert/code/ru/ip-assignment-7/main.cpp
 iostream
 -
 fstream
@@ -22,11 +22,11 @@ vector
 cassert
 -
 
-/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/main_test.cpp
+/home/robert/code/ru/ip-assignment-7/main_test.cpp
 main.cpp
-/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/main.cpp
+/home/robert/code/ru/ip-assignment-7/main.cpp
 gtest/gtest.h
-/Users/sjoerdvandiepen/Documents/csru/imperative_programming/IPC031_2021_assignment_8_files/gtest/gtest.h
+/home/robert/code/ru/ip-assignment-7/gtest/gtest.h
 iostream
 -
 fstream

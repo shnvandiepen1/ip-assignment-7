@@ -112,7 +112,6 @@ TEST(operators, length_random)
     }
 }
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION match_tracks
 TEST(commands, match_tracks1)
 {
     string match = "my";
@@ -133,9 +132,7 @@ TEST(commands, match_tracks3)
     int expected = 2;
     EXPECT_EQ(expected, match_tracks(testDB,match,false));
 }
-END OF COMMENT */
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION match_artists
 TEST(commands, match_artists1)
 {
     string match = "A";
@@ -156,9 +153,7 @@ TEST(commands, match_artists3)
     int expected = 2;
     EXPECT_EQ(expected, match_artists(testDB,match,false));
 }
-END OF COMMENT */
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION match_cds
 TEST(commands, match_cds1)
 {
     string match = "A";
@@ -179,15 +174,12 @@ TEST(commands, match_cds3)
     int expected = 2;
     EXPECT_EQ(expected, match_cds(testDB,match,false));
 }
-END OF COMMENT */
 
-/* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION number_of_cds
 TEST(commands, number_of_cds)
 {
     int expected = 5;
     EXPECT_EQ(expected, number_of_cds(testDB));
 }
-END OF COMMENT */
 
 /* UNCOMMENT THIS SECTION IF YOU HAVE DEVELOPED FUNCTION read_tracks 
 TEST(read, read_db_with_zero_tracks)

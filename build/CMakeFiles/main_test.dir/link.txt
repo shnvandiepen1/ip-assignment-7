@@ -1,1 +1,1 @@
-/Library/Developer/CommandLineTools/usr/bin/c++  -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX11.1.sdk -Wl,-search_paths_first -Wl,-headerpad_max_install_names CMakeFiles/main_test.dir/main_test.cpp.o -o main_test  lib/libgtest_main.a lib/libgtest.a 
+/bin/x86_64-linux-gnu-g++-9  -g   CMakeFiles/main_test.dir/main_test.cpp.o  -o main_test  lib/libgtest_maind.a lib/libgtestd.a -lpthread 
