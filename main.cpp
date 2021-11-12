@@ -123,7 +123,7 @@ int match_tracks (const vector<Track>& tracks, string track, bool display)
     // Returns amount of matched tracks found and displays info about them if display is true
 
     int matches = 0;
-    for (long unsigned int i = 0; i < tracks.size(); i++)
+    for (int i = 0; i < static_cast<int>(tracks.size()); i++)
     {
         if(match(track, tracks[i].title)) {
             if(display) {
@@ -147,12 +147,12 @@ int match_artists (const vector<Track>& tracks, string artist, bool display)
     // max once. Displays artists if display set to true.
 
     vector<string> matchedArtists;
-    for(long unsigned int i = 0; i < tracks.size(); i++) {
+    for(int i = 0; i < static_cast<int>(tracks.size()); i++) {
         const string CURRENT_ARTIST = tracks[i].artist;
         if (match(artist, CURRENT_ARTIST))
         {
             bool alreadyMatched = false;
-            for (long unsigned int j = 0; j < matchedArtists.size(); j++)
+            for (int j = 0; j < static_cast<int>(matchedArtists.size()); j++)
             {
                 if(CURRENT_ARTIST == matchedArtists[j])
                     alreadyMatched = true;
@@ -187,11 +187,11 @@ int match_cds (const vector<Track>& tracks, string artist, bool display)
     // max once. Displays information about album if display set to true.
 
     vector<string> matchedAlbums;
-    for (long unsigned int i = 0; i < tracks.size(); i++)
+    for (int i = 0; i < static_cast<int>(tracks.size()); i++)
     {
         if(match(artist, tracks[i].artist)) {
             bool alreadyMatched = false;
-            for (long unsigned int j = 0; j < matchedAlbums.size(); j++)
+            for (int j = 0; j < static_cast<int>(matchedAlbums.size()); j++)
             {
                 if (tracks[i].cd == matchedAlbums[j])
                     alreadyMatched = true;
@@ -219,9 +219,9 @@ int number_of_cds (const vector<Track>& tracks)
     //
 
     vector<string> albums;
-    for(long unsigned int i = 0; i < tracks.size(); i++) {
+    for(int i = 0; i < static_cast<int>(tracks.size()); i++) {
         bool alreadyCounted = false;
-        for(long unsigned int j = 0; j < albums.size(); j++)
+        for(int j = 0; j < static_cast<int>(albums.size()); j++)
             if (tracks[i].cd == albums[j]) 
                 alreadyCounted = true;
         if(!alreadyCounted)
@@ -237,6 +237,8 @@ istream& operator>> (istream& in, Track& track)
     the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
     The following (empty) line from in has also been read.
 */
+
+    return in;
 }
 
 int read_tracks (string filename, vector<Track>& tracks, bool show_content)
@@ -247,6 +249,7 @@ int read_tracks (string filename, vector<Track>& tracks, bool show_content)
     is the number of tracks that have been read.
     The read tracks are shown on screen only if show_content is true.
 */
+    
 }
 
 #ifndef TESTING
