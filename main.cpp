@@ -233,23 +233,33 @@ int number_of_cds (const vector<Track>& tracks)
 istream& operator>> (istream& in, Track& track)
 {// Precondition:
     assert (true) ;
-/*  Postcondition:
-    the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
-    The following (empty) line from in has also been read.
-*/
-
+    /*  Postcondition:
+        the content of the first 8 lines from in have been read and are stored in the corresponding members of track.
+        The following (empty) line from in has also been read.
+    */ 
+    in>>track;
     return in;
 }
 
 int read_tracks (string filename, vector<Track>& tracks, bool show_content)
-{// Precondition:
+{
+    // Precondition:
     assert (true);
-/*  Postcondition:
-    tracks is a copy of the tracks that are found in the file with file name filename, and result
-    is the number of tracks that have been read.
-    The read tracks are shown on screen only if show_content is true.
-*/
+    /*  Postcondition:
+        tracks is a copy of the tracks that are found in the file with file name filename, and result
+        is the number of tracks that have been read.
+        The read tracks are shown on screen only if show_content is true.
+    */
+   ifstream in_file(filename);
+   if(in_file.fail())
+       return 0;
     
+    while(!in_file.fail()) {
+        Track track;
+        in_file >> track;
+        tracks.push_back(track);
+    }
+    return tracks.size();
 }
 
 #ifndef TESTING
