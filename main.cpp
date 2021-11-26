@@ -49,7 +49,7 @@ bool match (string sub, string source)
 
 ostream& operator<< (ostream& out, const Length length)
 {// Precondition:
-    assert (length.minutes >= 0 && length.seconds >= 0 && length.seconds <= 59) ;
+    assert (true) ;
 /*  Postcondition:
     the value of length is shown via out in the format: minutes, ':', seconds (two digits)
 */
@@ -70,9 +70,8 @@ istream& operator>> (istream& in, Length& length)
 /*  Postcondition:
     the value of length has been read from in: first minutes, then ':', then seconds
 */
-    char a = ':';
-    in >> length.minutes >> a >> length.seconds;;
-    
+    char ignore;
+    in >> length.minutes >> ignore >> length.seconds;
     return in;
 }
 
@@ -253,10 +252,29 @@ int read_tracks (string filename, vector<Track>& tracks, bool show_content)
    ifstream in_file(filename);
    if(in_file.fail())
        return 0;
-    
+
     while(!in_file.fail()) {
         Track track;
-        in_file >> track;
+        TrackDisplay td = {true, true, true, true, true, true, true, true};
+        string emptyline;
+        string firstLine;
+        getline(in_file, firstLine);
+        if(firstLine.length() == 0)
+            break;
+        track.artist = firstLine;
+        getline(in_file, track.cd);
+        in_file >> track.year;
+        in_file >> track.track;
+        getline(in_file, track.title);
+        getline(in_file, track.title);
+        getline(in_file, track.tags);
+        in_file >> track.time;
+        getline(in_file, track.country);
+        getline(in_file, track.country);
+        getline(in_file, emptyline);
+
+        if (show_content)
+            show_track(track, td);
         tracks.push_back(track);
     }
     return tracks.size();
